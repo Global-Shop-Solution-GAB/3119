@@ -1,0 +1,59 @@
+Program.Sub.ScreenSU.Start
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+
+'03/16/09 JT
+'[Script2] HookId 14430
+F.ODBC.Connection!con.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+
+V.Local.sST.Declare(String)
+V.Local.sSR.Declare(String)
+V.Local.sRep.Declare(String)
+
+F.Intrinsic.String.Concat("select SALESPERSON_CODE from V_SALESPEOPLE where SALESPERSON='",V.Passed.000014,"'",V.Local.sSR)
+F.ODBC.Connection!con.OpenRecordsetRO("rstSR",V.Local.sSR)
+	F.Intrinsic.Control.If(V.ODBC.con!rstSR.EOF,=,False)
+		V.Local.sRep.Set(V.ODBC.con!rstSR.FieldVal!SALESPERSON_CODE)
+
+			F.Intrinsic.String.Concat("select * from ORDER_SHIP_TO where CUSTOMER='",V.Passed.000001,"'and RECORD_NO='  C ' and ORDER_SHIP_ID='",V.Passed.000003,"'",V.Local.sST)
+			F.ODBC.Connection!con.OpenRecordsetRW("rstSHIP",V.Local.sST)
+				F.Intrinsic.Control.If(V.ODBC.con!rstSHIP.EOF,=,False)
+				F.Intrinsic.Control.DoUntil(V.ODBC.con!rstSHIP.EOF,=,True)
+					F.ODBC.con!rstSHIP.Set!SHIP_ID(V.Passed.000003)
+					F.ODBC.con!rstSHIP.Set!NAME_CUSTOMER_SHIP(V.Passed.000005)
+					F.ODBC.con!rstSHIP.Set!ADDRESS_1_SHIP(V.Passed.000006)
+					F.ODBC.con!rstSHIP.Set!ADDRESS_2_SHIP(V.Passed.000007)
+					F.ODBC.con!rstSHIP.Set!ADDRESS_3_SHIP(V.Passed.000036)
+					F.ODBC.con!rstSHIP.Set!ADDRESS_4_SHIP(V.Passed.000037)
+					F.ODBC.con!rstSHIP.Set!ADDRESS_5_SHIP(V.Passed.000039)
+					F.ODBC.con!rstSHIP.Set!CITY_SHIP(V.Passed.000008)
+					F.ODBC.con!rstSHIP.Set!STATE_SHIP(V.Passed.000009)
+					F.ODBC.con!rstSHIP.Set!CODE_ZIP_SHIP(V.Passed.000010)
+					F.ODBC.con!rstSHIP.Set!COUNTRY_SHIP(V.Passed.000011)
+					F.ODBC.con!rstSHIP.Set!ATTENTION_SHIP(V.Passed.000012)
+					F.ODBC.con!rstSHIP.Set!SALESPERSON_SHIP(V.Local.sRep)
+					F.ODBC.con!rstSHIP.Update
+				F.ODBC.con!rstSHIP.MoveNext
+				F.Intrinsic.Control.Loop
+				F.Intrinsic.Control.EndIf
+			F.ODBC.con!rstSHIP.Close
+
+
+		F.Intrinsic.UI.Msgbox("Update Complete")
+	F.Intrinsic.Control.EndIf
+F.ODBC.con!rstSR.Close
+
+F.ODBC.Connection!con.Close
+
+F.Intrinsic.Control.End
+
+
+
+Program.Sub.Main.End
+
+
