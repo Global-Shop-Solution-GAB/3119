@@ -1,0 +1,31 @@
+Program.Sub.ScreenSU.Start
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+
+'03/16/09 JT
+'Populate Hooks 14350 and 14410
+
+
+F.Intrinsic.Control.If(V.Caller.Hook,=,"14350")
+	V.Passed.000201.Set("Long Name")
+		F.Intrinsic.Control.If(V.Caller.Switches,=,"O")
+			V.Passed.000202.Set("Update SO")
+		F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.if(V.Caller.Hook,=,"14410")
+	V.Passed.000201.Set("Long Name")
+	V.Passed.000202.Set("Update SO")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.End
+
+
+Program.Sub.Main.End
+
+
